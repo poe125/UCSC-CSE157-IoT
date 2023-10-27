@@ -12,6 +12,8 @@ import simpleio
 from datetime import datetime
 from datetime import date
 
+I2C = busio.I2C(board.SCL, board.SDA)
+
 #SoilMoisture.py
 def SoilMoisture():
     i2c = board.I2C()
@@ -23,16 +25,15 @@ def SoilMoisture():
     
 #getting information from SHT30 Temperature/Humidity sensor
 def TempHumidity():
-    i2c = busio.I2C(board.SCL, board.SDA)
-    sensor = adafruit_sht31d.SHT31D(i2c)
+    sensor = adafruit_sht31d.SHT31D(I2C)
     print('Humidity: {0}%'.format(sensor.relative_humidity))
     print('Temperature: {0}C'.format(sensor.temperature))
     
 #getting information from the ADS1015 12-bit ADC
-# def ADS():
-#     i2cADS = busio.I2C(board.SCL, board.SDA)
-#     ads = ADS.ADS1015(i2cADS)
-#     chan = AnalogIn(ads, ADS.P0)
+def NameADS():
+     ads = ADS.ADS1015(I2C)
+     chan = AnalogIn(ads, ADS.P0)
+     print(chan.value, chan.voltage)
 
 #getting time and date
 def DateTime():
@@ -42,9 +43,9 @@ def DateTime():
     print(current_date, current_time)
 
 #getting wind speed
-# def WindSpeed():
-#     wind_speed = simpleio.map_range(150, 0, 255, 0, 1023)
-#     print('Wind Speed:' + wind_speed)
+def WindSpeed():
+     wind_speed = simpleio.map_range(150, 0, 255, 0, 1023)
+     print('Wind Speed:' + str(wind_speed))
 
 #only once
 def name():
@@ -54,7 +55,7 @@ def main():
     DateTime()
     SoilMoisture()
     TempHumidity()
-    #ADS()
-    #WindSpeed()
+    NameADS()
+    WindSpeed()
     
 main()
