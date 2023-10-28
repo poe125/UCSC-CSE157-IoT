@@ -30,11 +30,20 @@ def TempHumidity():
     print('Temperature: {0}C'.format(sensor.temperature))
     
 #getting information from the ADS1015 12-bit ADC
-def NameADS():
+def WindSpeed():
      ads = ADS.ADS1015(I2C)
      chan = AnalogIn(ads, ADS.P0)
-     print(chan.value, chan.voltage)
-
+     max_number = 0;
+     print("ADS:",chan.value, chan.voltage)
+     while True:
+         voltage = chan.voltage
+         wind_speed = simpleio.map_range(voltage,	 #Actual read value
+                                      0.40, 0.78, #sensor min and max 
+                                      0, 32) #map min and max 
+#          if(max_number < voltage):
+#              max_number = voltage
+         print('Wind Speed:' + str(wind_speed)+ ' max:' + str(max_number) + " volt: " + str(voltage))
+     
 #getting time and date
 def DateTime():
     now = datetime.now()
@@ -42,20 +51,15 @@ def DateTime():
     current_date = now.strftime("%Y-%m-%d")
     print(current_date, current_time)
 
-#getting wind speed
-def WindSpeed():
-     wind_speed = simpleio.map_range(150, 0, 255, 0, 1023)
-     print('Wind Speed:' + str(wind_speed))
-
 #only once
 def name():
     print("Airi Kokuryo")
 
 def main():   
     DateTime()
-    SoilMoisture()
+   # SoilMoisture()
     TempHumidity()
-    NameADS()
     WindSpeed()
+    time.sleep(5)
     
 main()
