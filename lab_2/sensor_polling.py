@@ -20,7 +20,7 @@ def SoilMoisture():
     ss = Seesaw(i2c, addr=0x36)
     temperature = ss.get_temp()
     moisture = ss.moisture_read()
-    soilMoisture = "Soil Moisture:" + str(moisture) + "\n Soil Temperature" + str(temperature) + "\n"
+    soilMoisture = "Soil Moisture:" + str(moisture) + "\n" + "Soil Temperature:" + str(temperature) + "\n"
 #     print('Soil Moisture:'+ str(moisture))
 #     print('Soil Temperature:'+ str(temperature))
     return soilMoisture
@@ -30,7 +30,7 @@ def TempHumidity():
     sensor = adafruit_sht31d.SHT31D(I2C)
 #     print('Humidity: {0}%'.format(sensor.relative_humidity))
 #     print('Temperature: {0}C'.format(sensor.temperature))
-    tempHumidity = "Temperature:" + str(sensor.temperature) + "\n" + "Humidity" + str(sensor.relative_humidity) + "\n"    
+    tempHumidity = "Temperature:" + str(sensor.temperature) + "\n" + "Humidity:" + str(sensor.relative_humidity) + "\n"    
     return tempHumidity
 
 #getting information from the ADS1015 12-bit ADC
@@ -39,7 +39,7 @@ def WindSpeed():
      chan = AnalogIn(ads, ADS.P0)
      map_speed = simpleio.map_range(chan.voltage, 0.40, 0.78, 0, 32) #map min and max 
      #print('Wind Speed:' + str(wind_speed))
-     windSpeed = str(map_speed)
+     windSpeed = "Wind Speed:" + str(map_speed)
      return windSpeed
     
 #getting time and date
@@ -51,7 +51,7 @@ def DateTime():
     return dateTime
 
 def main():   
-    with open('/home/akokuryo/Documents/polling-log.txt', 'w') as f:
+    with open('/home/akokuryo/Documents/gitHub/UCSC-CSE157-IoT/lab_2/polling-log.txt', 'w') as f:
         f.write("AiriKokuryo")
     
     while True:
@@ -63,7 +63,7 @@ def main():
         time.sleep(5)
         print("complete")
         
-        with open('/home/akokuryo/Documents/polling-log.txt', 'a') as f:
+        with open('/home/akokuryo/Documents/gitHub/UCSC-CSE157-IoT/lab_2/polling-log.txt', 'a') as f:
             f.write(returnDateTime)
             f.write(returnSoilMoisture)
             f.write(returnTempHumidity)
