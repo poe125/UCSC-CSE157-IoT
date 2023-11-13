@@ -1,0 +1,17 @@
+multiconn:
+_init_:
+- use a host and port to listen for connection
+
+run:
+- listen for connection and start main event loop
+
+accept_wrapper:
+- accept and register new connection
+
+service_connection:
+- service existing connection and call to unregister when completed
+//wait for the new messages from client so it keeps on reading the data until the end of message→write a reply to the client
+
+unregister_and_close
+- try and except 
+- handle error
