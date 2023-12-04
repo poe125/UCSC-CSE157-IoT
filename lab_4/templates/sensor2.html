@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sensor Reading2</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='sensorpage.css') }}">
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+      #corner {
+        border-radius: 15px 50px;
+        background: Black;
+        padding: 20px;
+        width: auto;
+        height: auto;
+      }
+    </style>
+</head>
+<body>
+    <h1 id="corner">Sensor Reading2</h1>
+    <div class="container">
+    <table border="1">
+        <tr>
+            <th>Temperature</th>
+            <th>Humidity</th>
+            <th>Soil Moisture</th>
+            <th>Wind Speed</th>
+        </tr>
+        {% for row in content %}
+            <tr>
+                {% for content in row %}
+                    <td>{{ content }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+    <h1 id="corner">Plot</h1>
+    <img src="{{ url_for('static', filename='sensor_readings2_Temperature.png') }}" alt="Plot Image" width="600" height="400">
+    <img src="{{ url_for('static', filename='sensor_readings2_Humidity.png') }}" alt="Plot Image" width="600" height="400">
+    <img src="{{ url_for('static', filename='sensor_readings2_SoilMoisture.png') }}" alt="Plot Image" width="600" height="400">
+    <img src="{{ url_for('static', filename='sensor_readings2_WindSpeed.png') }}" alt="Plot Image" width="600" height="400">
+    <a href="/"><button class="btn"><i class="fa fa-home"></i> Home</button></a>
+</body>
+</html>
