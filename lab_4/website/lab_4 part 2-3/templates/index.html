@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Centered Elements</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="centered-content">
+    <h2>Homepage</h2>
+    <br>
+    <p> Displays the temperature, humdity, soil moisture, and wind sensor results. </p>
+    <br>
+    <p>※this is the experiment from CSE157, lab 4</p>
+    <div class="dropdown">
+      <button class="dropdown-btn" aria-haspopup="menu">
+        <span>sensor selection</span>
+        <span class="arrow"></span>
+      </button>
+      <ul class="dropdown-content" role="menu">
+        <li style="--delay: 1;"><a href="/sensor1">Sensor Readings1</a></li>
+        <li style="--delay: 2;"><a href="/sensor2">Sensor Readings2</a></li>
+        <li style="--delay: 3;"><a href="/sensor3">Sensor Readings3</a></li>
+      </ul>
+    </div>
+  </div>
+</body>
+
+</html>

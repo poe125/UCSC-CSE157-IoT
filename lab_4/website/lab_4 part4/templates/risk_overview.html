@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Risk Overview</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='sensorpage.css') }}">
+  <!-- Add icon library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    #corner {
+      border-radius: 15px 50px;
+      background: Black;
+      padding: 20px;
+      width: auto;
+      height: auto;
+    }
+  </style>
+  <meta http-equiv="refresh" content="4"> <!-- Refresh every 4 seconds -->
+</head>
+
+<body>
+  <a href="/"><button class="btn"><i class="fa fa-home"></i> Home</button></a>
+
+  <!--Show banner on the top-->
+  {% if risk == true %}
+  <h2> WILDFIRE RISK HIGH</h2>
+  {% endif %}
+
+
+  <h1 id="corner">Plot</h1>
+
+  <div class="image-container">
+    <div class="image-wrapper">
+      <img src="{{ url_for('static', filename='sensor_readings1_Risk.png') }}" alt="Risk">
+    </div>
+    <div class="image-wrapper">
+      <img src="{{ url_for('static', filename='sensor_readings2_Risk.png') }}" alt="Risk">
+    </div>
+    <div class="image-wrapper">
+      <img src="{{ url_for('static', filename='sensor_readings3_Risk.png') }}" alt="Risk">
+    </div>
+  </div>
+
+
+  <h1 id="corner">Risk table</h1>
+  <div class="container">
+    <table border="1">
+      <tr>
+        <th>System1 risk</th>
+        <th>System2 risk</th>
+        <th>System3 risk</th>
+      </tr>
+
+      {% for row in content %}
+
+      <tr>
+        {% for content in row %}
+        {% if loop.index0 == 4 %}
+        {% if "high" in content.lower() %}
+        <td class="high-risk">{{ content }}</td>
+        {% elif "m" in content.lower() %}
+        <td class="medium-risk">{{ content }}</td>
+        {% elif "low" in content.lower() %}
+        <td class="low-risk">{{ content }}</td>
+        {% else %}
+        <td>{{ content }}</td>
+        {% endif %}
+        {% else %}
+        <td>{{ content }}</td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</body>
+
+</html>
