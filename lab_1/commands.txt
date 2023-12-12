@@ -1,0 +1,21 @@
+ifconfig
+
+in raspberrypi, type ifconfig
+
+inet 169.233.142.93
+
+sudo raspi-config→enable SSH connection
+
+on windows at cmd,
+ssh akokuryo@ (wlan0 inet num)
+
+change mode using
+sudo cp /etc/network/wifi-interface interfaces
+or sudo cp /etc/network/adhoc-interface interfaces
+
+adhoc mode: is allowing the RaspberryPi to be the host of the internet. in this mode, it will not be having any internet connection(as it is having rn, though)
+
+sudo: 権限名
+nano, vi: opener
+sudo nano "filename" and you can open the files you want to edit.
+Also, press control X and yes and then enter to finish editing

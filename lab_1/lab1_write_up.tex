@@ -1,0 +1,299 @@
+%Setting the latex style wanted 
+\documentclass{article}
+
+% Packages to be used
+\usepackage{hyperref}       %Used for hyperlinks 
+\usepackage{xcolor}         %Used for code formatting
+\usepackage{listings}       %Used for code formatting
+\usepackage{lstautogobble}  %Used to help listing package
+\usepackage{float, graphicx}       %Used for inserting images
+    \graphicspath{{./images/}}     %Path to images
+
+%Setting code formatting
+\lstset{basicstyle=\ttfamily,
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue},
+  breaklines = true, 
+  autogobble=true
+}
+
+% Adding pre-amble stuff but not activated 
+\title{Lab 1 Write Up}
+\author{Keith Irby}
+
+
+% Part 1: Setup Instructions
+\begin{document}
+    \maketitle %activate title
+    \section{Setup Instructions}
+    This part describes how to setup the Raspberry Pi in detail using UCSC Eduroam wifi and updating the Raspberry Pi
+    
+    % Part 1: Setup Instructions itemized list
+    \begin{enumerate}
+        \item Download the \href{https://ubuntu.com/tutorials/how-to-install-ubuntu-desktop-on-raspberry-pi-4#2-prepare-the-sd-card}{Raspberry Pi Imager}
+        \item Install the latest 32 bit version of Raspberry Pi onto a SD card (Used release: 2023-05-03 )
+        \item Plug the SD card you just flashed into the Raspberry Pi along with power, video out, mouse, and keyboard
+        \item Let the Raspberry Pi boot and follow the setup instruction. Skip wifi setup and restart the Pi. 
+        %\begin{figure}
+            %\centering
+        %    \includegraphics[width=\linewidth]{0_boot_up_screen.png}
+        %    \caption{Raspberry Pi OS boot up Screen}
+        %\end{figure}
+        \item Once restarted you should be greated by the boot screen 
+        \item Copy the wifi.sh file over to the Raspberry Pi 
+        \item Open a terminal and go to the same directory as the wifi.sh file
+        \item run the following command on the Raspberry Pi wifi.sh file to give it edit access: 
+            %Adding a terminal command           
+            \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ chmod +x wifi.sh
+            \end{lstlisting}
+        \item Run the provided wifi.sh script using your Cruz ID gold login (username not email and gold password) 
+            %Adding terminal command           
+            \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ ./wifi.sh
+            \end{lstlisting}
+        \item Install VIM because it is better than Nano using the following command: 
+            %Adding a terminal command
+            \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ sudo apt install vim
+            \end{lstlisting}
+        \item Update the Raspberry Pi by running the following command:
+            %Adding a terminal command
+            \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ sudo apt-get update
+            \end{lstlisting}
+        \item Reboot the Raspberry Pi by running the following :
+            %Adding a terminal command
+            \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ sudo reboot
+            \end{lstlisting}
+    \end{enumerate}
+    \subsection{Notes and Comments}
+    If the current method isnt working for you to setup a connection to eduroam on UCSC 
+    campus use the \href{https://its.ucsc.edu/wireless/eduroam-manual-config.html}{following guide} to do it. Also, 
+    if you want to change your password in the future you can use the following command to open a menu to change it:
+    \begin{lstlisting}[language=bash]
+        rpi@raspberrypi:~ $ sudo  raspi-config
+        \end{lstlisting}
+
+
+    \section{Setting up and connecting to SSH (Windows 11)}
+    \begin{enumerate}
+        \item Boot up the Raspberry Pi 
+        \item open the terminal and run the following command: 
+        %Adding a terminal command
+        \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ sudo raspi-config
+            \end{lstlisting}
+        \item navigate to interfaces and turn on SSH 
+        \item Run the following command to get the Raspberry Pi's IP Address for SSH:
+        %Adding a terminal command
+            \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ hostname -I
+            \end{lstlisting}
+        \item Install \href{https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html}{PuTTY} for Windows 11
+        \item Open the PuTTY client and set the \textbf{Host Name} to the IP address you just found on the Raspberry Pi and the \textbf{Port} as 22
+        \item Click \textbf{Open} on the bottom of the PuTTY application and login using your Raspberry Pi Credentials
+    \end{enumerate}
+    \subsection{Notes and Comments}
+    I would note using SSH might not be very useful for the CSE 157 course and do not see myself using this. I dont find it 
+    useful because when the Pi is in Ad-Hoc mode you cannot SSH into it without being nearby for a connection, which from what I understand about the course 
+    the Pi will be in Ad-Hoc mode a decent amount of the time. Also, I find Vim easier to use than Nano or VS code for quick development 
+    on smaller projects like this. Vim over nano because I was taught Vim first. Vim over VS code because when you're working with embedded 
+    devices its always quicker to develop without the bloat of an entire IDE. 
+
+    %
+    % Setting up ad-hoc mode
+    %
+    \section{Ad-hoc Mode and Wifi Mode}
+    \subsection{Ad-Hoc Mode}
+    \subsubsection{Preparing for Ad-hoc mode}
+    \begin{enumerate}
+        \item Open the terminal and install the following package like so: 
+        %Adding a terminal command
+        \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ sudo apt-get install isc-dhcp-server 
+        \end{lstlisting}
+        \item Next go to the following directory using the terminal like so: 
+        %Adding a terminal command
+        \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ cd /etc/network 
+        \end{lstlisting}
+        \item After getting to  directory \verb|cd /etc/network| use the following command to make a copy of the current wifi interface: 
+        %Adding a terminal command
+        \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ sudo cp interfaces wifi-interface 
+        \end{lstlisting}
+        \item Now make a new Ad-Hoc interface like so: 
+        %Adding a terminal command
+        \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ sudo vim adhoc-interface 
+        \end{lstlisting}
+        \item Then copy the following code contents into the newly created Ad-Hoc interface: 
+        %Adding a terminal command
+        \begin{lstlisting}[language=bash]
+            auto lo
+            iface lo inet loopback
+            iface eth0 inet dhcp
+          
+            auto wlan0
+            iface wlan0 inet static
+            address 192.168.1.1
+            netmask 255.255.255.0
+            wireless-channel 4
+            wireless-essid RPitest
+            wireless-mode ad-hoc
+        \end{lstlisting}
+        \item Then open the following file using the following command:
+        %Adding a terminal command
+        \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ sudo vim /etc/dhcp/dhcpd.conf 
+        \end{lstlisting}
+        \item Once the \verb |dhcpd.conf| file is open add the following to the very bottom of the file with no comments: 
+        %Adding a terminal command
+        \begin{lstlisting}[language=bash]
+            ddns-update-style interim;
+            default-lease-time 600;
+            max-lease-time 7200;
+            authoritative;
+            log-facility local7;
+            subnet 192.168.1.0 netmask 255.255.255.0 {
+             range 192.168.1.5 192.168.1.150;
+            }
+        \end{lstlisting}
+        \item Reboot and follow the subsection below to start Ad-Hoc mode, if you want it to start in WiFi mode do the following to swap interfaces back to wifi: 
+        %Adding a terminal command
+        \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ sudo cp /etc/network/wifi-interface /etc/network/wifi-interface/interfaces 
+        \end{lstlisting}
+    \end{enumerate}
+    \subsubsection{Starting Ad-Hoc mode}
+    \begin{enumerate}
+        \item Open a terminal
+        \item   to turn off the networking client:
+            %Adding a terminal command
+            \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ wpa_cli terminate
+            \end{lstlisting}
+        \item Type the following command to turn off the networking client:
+            %Adding a terminal command
+            \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ sudo ifconfig wlan0 down
+            \end{lstlisting}
+        \item Type the following command to turn the Raspberry Pi into Ad-Hoc mode replacing \verb!<ssid>! with what you want the network to be named:
+            %Adding a terminal command
+            \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ sudo iwfconfig wlan0 mode ad-hoc channel 04 essid <ssid>
+            \end{lstlisting}
+        \item Type the following command to start the Ad-Hoc mode:
+            %Adding file contents
+            \begin{lstlisting}[language=bash]
+                rpi@raspberrypi:~ $ sudo ifconfig wlan0 up
+                \end{lstlisting}
+    \end{enumerate}
+    \subsection{Wifi Mode}
+    \begin{enumerate}
+        \item First do the following command: 
+        %Adding a terminal command
+        \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ sudo cp /etc/network/wifi-interface /etc/network/interfaces 
+        \end{lstlisting}
+        \item  Then use the following command:
+         %Adding a terminal command
+         \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ systemctl restart networking
+        \end{lstlisting}
+        \item Then type the following command to restart dhcpcd services:
+        %Adding a terminal command
+        \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ systemctl restart dhcpcd
+        \end{lstlisting}
+        \item Finally, reboot the system with the following command:
+        %Adding a terminal command
+        \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ sudo reboot 
+            \end{lstlisting}
+    \end{enumerate}
+
+
+    \section{Generating a weather report}
+    \begin{enumerate}
+        \item Install python requests package using the following command:
+        %Adding a terminal command
+        \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ pip3 install requests
+        \end{lstlisting}
+        \item run the following command on the python script provided: 
+        %Adding a terminal 
+        \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ python3 generate_report.py
+        \end{lstlisting}
+    \end{enumerate}
+    \subsection{Notes and Comments}
+    If you want to see a description on how the \verb|generate_report.py| works, open the file. I added comments throughout it 
+    and used functions so it is easier for newer developers to understand what is happening. Also, the program uses the open-meteo
+    own api which is just a HTTPS get request containing data from their API editor found \href{https://open-meteo.com/en/docs}{here}. You configure 
+    what you want in your API call by clicking check boxes and typing the location using latitude and longitude, then copy API URL found on the page, 
+    use it like in \verb|generate_report.py|.
+
+    \section{Adding weather report generation to bootup}
+    \begin{enumerate}
+        \item Run the following command to open a file that runs on boot:
+        \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ sudo vim /home/rpi/.bashrc
+        \end{lstlisting}
+        \item At the very bottom of this file add the following line, it should be noted the path is whereever you placed \verb|generate_report.py|:
+        \begin{lstlisting}[language=bash]
+            rpi@raspberrypi:~ $ python3 ~/Documents/lab1/generate_report.py
+        \end{lstlisting}
+    \end{enumerate}
+
+
+    \section{Conclusion}
+    From this lab I learned setting up a Pi into Ad-Hoc mode is confusing and could not 
+    find a way to get it working on my own. I also could not find a resource for the code 
+    the TA provided for turning the Pi into Ad-Hoc mode. I did learn how to insert a bootup 
+    script with a python file, which I didnt know was so easy. Other than this I have developed with 
+    python, used Linux distros, and done API calls all in the past.
+    \subsection{sources}
+    \begin{enumerate}
+        \item \href{https://roboticsbackend.com/install-use-vim-raspberry-pi/}{Source 1} 
+        \item \href{https://tex.stackexchange.com/questions/162323/how-to-left-align-lstlisting-code-with-text}{Source 2}
+        \item \href{https://www.onlogic.com/company/io-hub/how-to-ssh-into-raspberry-pi/}{Source 3}
+        \item \href{https://pyshine.com/How-to-configure-Raspberry-Pi-in-Ad-hoc-wifi-mode/}{Source 4}
+        \item \href{https://www.geeksforgeeks.org/get-current-date-and-time-using-python/}{Source 5}
+        \item \href{https://realpython.com/python-requests/}{Source 6}
+        \item \href{https://www.geeksforgeeks.org/python-datetime-module/}{Source 7}
+        \item \href{https://www.geeksforgeeks.org/writing-to-file-in-python/}{Source 8}
+        \item \href{https://stackoverflow.com/questions/35415647/how-to-write-a-file-to-the-desktop-in-python}{Source 9}
+    \end{enumerate}
+
+
+\end{document} 
+
+
+%Resources
+%part 1 setup resources 
+% https://roboticsbackend.com/install-use-vim-raspberry-pi/
+% https://tex.stackexchange.com/questions/162323/how-to-left-align-lstlisting-code-with-text
+%Part 2 ssh resources
+%https://www.onlogic.com/company/io-hub/how-to-ssh-into-raspberry-pi/
+%part 3 ad-hoc mode resources 
+%
+%part 4 resources
+
+
+
+Volume of Base (mL) pH  Volume of Base (mL) pH Volume of Base (mL)  pH
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
